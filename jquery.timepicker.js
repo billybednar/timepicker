@@ -695,7 +695,9 @@ if(typeof jQuery != 'undefined') {
          * false if given string can't be converted.
          *
          * If there is an 'a' in the string we set am to true, if there is a 'p'
-         * we set pm to true, if both are present only am is setted to true.
+         * we set pm to true, if both are present only am is setted to true. If
+         * neither is present times between 1:00 and 6:59 are assumed to be pm,
+         * while others are am.
          *
          * All non-digit characters are removed from the string before trying to
          * parse the time.
@@ -717,7 +719,7 @@ if(typeof jQuery != 'undefined') {
          * start parsing process again. Examples:
          *
          * '95' is treated as '950' and converted to 09:50:00 am
-         * '46' is treated as '460' and converted to 05:00:00 am
+         * '46' is treated as '460' and converted to 05:00:00 pm
          * '57' can't be converted and the function returns false.
          *
          * For a detailed list of supported formats check the unit tests at
@@ -796,6 +798,10 @@ if(typeof jQuery != 'undefined') {
                 if (am && h == 12) {
                     h = 0;
                 } else if (pm && h < 12) {
+                    h = h + 12;
+                }
+
+                if (!am && !pm && h != 0 && h < 7) {
                     h = h + 12;
                 }
 
